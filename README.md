@@ -70,10 +70,29 @@ export ANDROID_HOME=/path/to/Android/Sdk
 
 - JDK 21、Gradle 9.7.1（wrapper 自带）、AGP 9.4.0
 - `compileSdk = 37` / `compileSdkMinor = 2`，`buildToolsVersion = 37.0.0`
-- 没有 `keystore.properties` 时 release 使用 **debug key 签名**，仍可安装
+- 签名：在仓库根目录放 `keystore.properties`（已在 `.gitignore` 中）：
+
+  ```properties
+  storeFile=keystore/nrst-release.jks
+  storePassword=…
+  keyAlias=nrst
+  keyPassword=…
+  ```
+
+  也可以用环境变量 `NRST_KEYSTORE` / `NRST_KEYSTORE_PASSWORD` / `NRST_KEY_ALIAS` / `NRST_KEY_PASSWORD`。
+  没有配置时 release 回落到 **debug key 签名**，仍可安装，但不适合分发。
+
+- 当前发布版的签名证书 SHA-256：`76d7c9407d21a666a47069f095ff341cecf8fc2578d595abe853834e212e3ec8`
 
 ## 安装
 
+0. **如果装过旧包** `io.github.nku100.carrierims`（v1 / v2），先卸载：
+
+   ```bash
+   adb uninstall io.github.nku100.carrierims
+   ```
+
+   新旧包名不同，会同时存在并各自 hook 同一个 key；而且签名不同，无法原地升级。
 1. 安装 APK。
 2. 在 LSPosed 中启用 **NR Signal Thresholds**，作用域已固定为 `com.android.phone`。
 3. 重启 `com.android.phone` 进程，或重启手机：
@@ -190,7 +209,7 @@ Hook 端会重新校验版本、字段类型、校验和、范围与严格递增
 隐藏后要再打开界面，只有两条路：
 
 - LSPosed → 模块 → **NR Signal Thresholds**
-- `adb shell am start -n io.github.nku100.carrierims/.ui.MainActivity`
+- `adb shell am start -n io.github.jingou.nrst/.ui.MainActivity`
 
 ## 兼容性
 
@@ -218,7 +237,7 @@ Hook 端会重新校验版本、字段类型、校验和、范围与严格递增
 - 依赖 AOSP 的 `com.android.phone.CarrierConfigLoader`；OEM ROM 里可能不存在
 - Google 若重命名读取方法，需要往 `HookTargets` 的候选列表补名字
 - `staticScope=true`：作用域不可由用户修改
-- release 默认使用 debug key 签名，正式分发前请自行配置 `keystore.properties`
+- 签名密钥不在仓库里（`keystore.properties`、`*.jks` 均已忽略）。**请备份**：丢失后无法再发布能覆盖升级的新版本
 
 ## 目录
 

@@ -73,10 +73,32 @@ export ANDROID_HOME=/path/to/Android/Sdk
 
 - JDK 21, Gradle 9.7.1 (wrapper), AGP 9.4.0
 - `compileSdk = 37` / `compileSdkMinor = 2`, `buildToolsVersion = 37.0.0`
-- Without `keystore.properties`, release builds are **debug-signed** (installable, but not for publishing)
+- Signing: put `keystore.properties` in the repo root (git-ignored):
+
+  ```properties
+  storeFile=keystore/nrst-release.jks
+  storePassword=…
+  keyAlias=nrst
+  keyPassword=…
+  ```
+
+  Environment variables `NRST_KEYSTORE`, `NRST_KEYSTORE_PASSWORD`, `NRST_KEY_ALIAS`,
+  `NRST_KEY_PASSWORD` work too. Without either, releases fall back to the **debug key**
+  (installable, not for distribution).
+
+- The published build is signed with the project key. Certificate SHA-256:
+  `76d7c9407d21a666a47069f095ff341cecf8fc2578d595abe853834e212e3ec8`
 
 ## Install
 
+0. **If the old package** `io.github.nku100.carrierims` (v1 / v2) is installed, uninstall it first:
+
+   ```bash
+   adb uninstall io.github.nku100.carrierims
+   ```
+
+   The packages are different, so both would stay installed and both would hook the same key — and
+   the signatures differ, so an in-place upgrade is impossible.
 1. Install the APK.
 2. Enable **NR Signal Thresholds** in LSPosed. The scope is already `com.android.phone`.
 3. Restart the phone process or reboot:
@@ -173,7 +195,7 @@ The switch in the *App* card disables only the launcher entry (an `activity-alia
 hook keep working. Two ways back to the screen:
 
 - LSPosed → Modules → **NR Signal Thresholds**
-- `adb shell am start -n io.github.nku100.carrierims/.ui.MainActivity`
+- `adb shell am start -n io.github.jingou.nrst/.ui.MainActivity`
 
 ## Compatibility
 
@@ -202,7 +224,7 @@ Issues are welcome. Please include:
 - Depends on AOSP's `com.android.phone.CarrierConfigLoader`, which OEM ROMs may not have
 - If Google renames the read method, add the new name to `HookTargets`
 - `staticScope=true`: users cannot change the scope
-- Release builds are debug-signed by default; configure `keystore.properties` before distributing
+- The signing key is not in the repo (`keystore.properties` and `*.jks` are ignored). **Back it up**: losing it means no future release can upgrade an installed one
 
 ## Layout
 

@@ -9,6 +9,8 @@
 | 唯一可写 key | `5g_nr_ssrsrp_thresholds_int_array` |
 | 值 | 4 个严格递增的整数，单位 dBm，范围 `[-140, -44]` |
 | 其他 carrier config | 一律不读、不写、不改 |
+| 应用身份 | `io.github.jingou.nrst`（v3 起）。旧包 `io.github.nku100.carrierims` 无法原地升级，需卸载 |
+| 签名 | 项目自有 RSA-4096 密钥；`keystore.properties` 与 `*.jks` 不入库 |
 | 持久化 | LSPosed 远程配置组 `nr_ssrsrp_thresholds` |
 | 生效方式 | 拦截读取，每次读取时合并 |
 
