@@ -9,6 +9,6 @@
 }
 # Keep the entry class name readable: R8 may otherwise rename it and rewrite java_init.list to a
 # single letter, which works but makes logcat and crash reports unreadable.
--keep,allowoptimization class io.github.nku100.carrierims.hook.CarrierConfigModule {
+-keep,allowoptimization class io.github.jingou.nrst.hook.CarrierConfigModule {
     public <init>();
 }

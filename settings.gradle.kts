@@ -14,7 +14,7 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "carrier-ims"
+rootProject.name = "nr-signal-thresholds"
 
 include(":app")
 include(":core")

@@ -43,10 +43,10 @@
     <string name="icon_hide_label">隐藏应用图标</string>
     <string name="icon_hide_hint">只隐藏桌面入口，模块照常工作，仍可从 LSPosed 或 adb 打开本界面。</string>
     <string name="icon_hide_title">隐藏应用图标？</string>
-    <string name="icon_hide_message">桌面入口将消失。再次打开本界面：\n\n• LSPosed → 模块 → NR 信号阈值\n• adb shell am start -n io.github.nku100.carrierims/.ui.MainActivity\n\n模块保持生效，继续应用你的阈值。</string>
+    <string name="icon_hide_message">桌面入口将消失。再次打开本界面：\n\n• LSPosed → 模块 → NR 信号阈值\n• adb shell am start -n io.github.jingou.nrst/.ui.MainActivity\n\n模块保持生效，继续应用你的阈值。</string>
     <string name="icon_hide_confirm">隐藏</string>
     <string name="icon_hide_cancel">取消</string>
-    <string name="icon_hidden_warning">图标已隐藏。重新打开：\nadb shell am start -n io.github.nku100.carrierims/.ui.MainActivity</string>
+    <string name="icon_hidden_warning">图标已隐藏。重新打开：\nadb shell am start -n io.github.jingou.nrst/.ui.MainActivity</string>
     <string name="icon_hidden_toast">已隐藏桌面图标</string>
     <string name="icon_restored_toast">已恢复桌面图标</string>
 

@@ -15,19 +15,19 @@ val signing = Properties().apply {
 fun signingValue(key: String, variable: String): String? =
     signing.getProperty(key) ?: System.getenv(variable)
 
-val storePath = signingValue("storeFile", "CARRIER_IMS_KEYSTORE")
-val storeSecret = signingValue("storePassword", "CARRIER_IMS_KEYSTORE_PASSWORD")
-val keyName = signingValue("keyAlias", "CARRIER_IMS_KEY_ALIAS")
-val keySecret = signingValue("keyPassword", "CARRIER_IMS_KEY_PASSWORD")
+val storePath = signingValue("storeFile", "NRST_KEYSTORE")
+val storeSecret = signingValue("storePassword", "NRST_KEYSTORE_PASSWORD")
+val keyName = signingValue("keyAlias", "NRST_KEY_ALIAS")
+val keySecret = signingValue("keyPassword", "NRST_KEY_PASSWORD")
 val hasReleaseKey = storePath != null && storeSecret != null && keyName != null &&
-        keySecret != null && file(storePath).exists()
+        keySecret != null && rootProject.file(storePath).exists()
 
 if (!hasReleaseKey) {
-    logger.warn("carrier-ims: no release keystore configured, release builds use the debug key")
+    logger.warn("nr-signal-thresholds: no release keystore configured, release builds use the debug key")
 }
 
 android {
-    namespace = "io.github.nku100.carrierims"
+    namespace = "io.github.jingou.nrst"
     compileSdk = 37
     compileSdkMinor = 2
     buildToolsVersion = "37.0.0"
@@ -35,17 +35,17 @@ android {
     enableKotlin = false
 
     defaultConfig {
-        applicationId = "io.github.nku100.carrierims"
+        applicationId = "io.github.jingou.nrst"
         minSdk = 26
         targetSdk = 37
-        versionCode = 2
-        versionName = "2.0.0"
+        versionCode = 3
+        versionName = "3.0.0"
     }
 
     signingConfigs {
         if (hasReleaseKey) {
             create("release") {
-                storeFile = file(storePath!!)
+                storeFile = rootProject.file(storePath!!)
                 storePassword = storeSecret
                 keyAlias = keyName
                 keyPassword = keySecret

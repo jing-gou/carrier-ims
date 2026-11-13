@@ -43,10 +43,10 @@
     <string name="icon_hide_label">Hide app icon</string>
     <string name="icon_hide_hint">Hides only the launcher entry. The module keeps working, and this screen stays reachable from LSPosed or adb.</string>
     <string name="icon_hide_title">Hide the app icon?</string>
-    <string name="icon_hide_message">The launcher entry will disappear. To open this screen again:\n\n• LSPosed → Modules → NR Signal Thresholds\n• adb shell am start -n io.github.nku100.carrierims/.ui.MainActivity\n\nThe module stays active and keeps applying your thresholds.</string>
+    <string name="icon_hide_message">The launcher entry will disappear. To open this screen again:\n\n• LSPosed → Modules → NR Signal Thresholds\n• adb shell am start -n io.github.jingou.nrst/.ui.MainActivity\n\nThe module stays active and keeps applying your thresholds.</string>
     <string name="icon_hide_confirm">Hide</string>
     <string name="icon_hide_cancel">Cancel</string>
-    <string name="icon_hidden_warning">Icon hidden. Reopen with:\nadb shell am start -n io.github.nku100.carrierims/.ui.MainActivity</string>
+    <string name="icon_hidden_warning">Icon hidden. Reopen with:\nadb shell am start -n io.github.jingou.nrst/.ui.MainActivity</string>
     <string name="icon_hidden_toast">Launcher icon hidden</string>
     <string name="icon_restored_toast">Launcher icon restored</string>
 

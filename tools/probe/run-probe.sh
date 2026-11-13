@@ -52,10 +52,10 @@ javac -nowarn -source 8 -target 8 -bootclasspath "$(win "$PLATFORM")" -d "$(win 
 "$D8" --release --min-api 26 --lib "$(win "$PLATFORM")" --output "$(win "$OUT")" \
     "$(win "$OUT/CarrierConfigProbe.class")"
 
-"${adb[@]}" push "$(win "$OUT/classes.dex")" /data/local/tmp/carrierims-probe.dex > /dev/null
+"${adb[@]}" push "$(win "$OUT/classes.dex")" /data/local/tmp/nrst-probe.dex > /dev/null
 
 SUBID=${SUBID:-$("${adb[@]}" shell 'dumpsys telephony.registry | grep -oE "mSubId=[0-9]+" | head -1' | tr -d '\r' | cut -d= -f2)}
 SUBID=${SUBID:-1}
 
 "${adb[@]}" shell \
-    "CLASSPATH=/data/local/tmp/carrierims-probe.dex app_process / CarrierConfigProbe $SUBID $*"
+    "CLASSPATH=/data/local/tmp/nrst-probe.dex app_process / CarrierConfigProbe $SUBID $*"
