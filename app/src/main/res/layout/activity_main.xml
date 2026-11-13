@@ -316,7 +316,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/card_preview_hint" />
 
-            <io.github.nku100.carrierims.ui.SignalBandView
+            <io.github.jingou.nrst.ui.SignalBandView
                 android:id="@+id/bandView"
                 android:layout_width="match_parent"
                 android:layout_height="76dp"
