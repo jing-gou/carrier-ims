@@ -1,5 +1,12 @@
 # Carrier IMS —— LSPosed 模块设计
 
+> **Superseded（2026-11-13）**：本文描述的是改造前的 VoLTE / VoWiFi / VT / VoNR 版本。
+> 模块现在只改 `5g_nr_ssrsrp_thresholds_int_array` 一个 key，架构见
+> [`docs/design.md`](../../design.md)。
+>
+> 文中关于 Hook 机制的实测结论（真实方法签名、委托关系、优先级与异常模式、dumpsys 不可见）
+> **仍然准确**，新设计直接沿用，因此保留原文而不是重写。
+
 日期：2026-09-12
 包名：`io.github.nku100.carrierims`
 
