@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">NR Signal Thresholds</string>
+    <string name="subtitle">5G NR SS-RSRP configuration</string>
+
+    <string name="status_unknown">Status unknown</string>
+    <string name="status_framework_unavailable">Framework unavailable</string>
+    <string name="status_hook_active">Hook active</string>
+    <string name="status_hook_inactive">Hook inactive</string>
+    <string name="status_restart_required">Restart required</string>
+
+    <string name="card_thresholds">Thresholds</string>
+    <string name="card_thresholds_hint">Four SS-RSRP boundaries in dBm. They must be strictly increasing.</string>
+    <string name="card_preview">Level preview</string>
+    <string name="card_preview_hint">How Android classifies a measurement with these boundaries.</string>
+
+    <string name="threshold_1_label">Threshold 1</string>
+    <string name="threshold_2_label">Threshold 2</string>
+    <string name="threshold_3_label">Threshold 3</string>
+    <string name="threshold_4_label">Threshold 4</string>
+    <string name="unit_dbm">dBm</string>
+    <string name="range_hint">Allowed range: -140 to -44 dBm</string>
+
+    <string name="preset_label">Preset</string>
+    <string name="preset_samsung">Samsung</string>
+    <string name="preset_oppo">OPPO</string>
+    <string name="preset_vivo">vivo</string>
+    <string name="preset_huawei">HUAWEI</string>
+    <string name="msg_preset_loaded">Loaded %1$s preset. Tap Apply to publish.</string>
+
+    <string name="level_none">NONE</string>
+    <string name="level_poor">POOR</string>
+    <string name="level_moderate">MODERATE</string>
+    <string name="level_good">GOOD</string>
+    <string name="level_excellent">EXCELLENT</string>
+
+    <string name="action_save">Save</string>
+    <string name="action_apply">Apply</string>
+    <string name="action_restore">Restore defaults</string>
+    <string name="action_refresh">Refresh status</string>
+
+    <string name="icon_card_title">App</string>
+    <string name="icon_hide_label">Hide app icon</string>
+    <string name="icon_hide_hint">Hides only the launcher entry. The module keeps working, and this screen stays reachable from LSPosed or adb.</string>
+    <string name="icon_hide_title">Hide the app icon?</string>
+    <string name="icon_hide_message">The launcher entry will disappear. To open this screen again:\n\n• LSPosed → Modules → NR Signal Thresholds\n• adb shell am start -n io.github.nku100.carrierims/.ui.MainActivity\n\nThe module stays active and keeps applying your thresholds.</string>
+    <string name="icon_hide_confirm">Hide</string>
+    <string name="icon_hide_cancel">Cancel</string>
+    <string name="icon_hidden_warning">Icon hidden. Reopen with:\nadb shell am start -n io.github.nku100.carrierims/.ui.MainActivity</string>
+    <string name="icon_hidden_toast">Launcher icon hidden</string>
+    <string name="icon_restored_toast">Launcher icon restored</string>
+
+    <string name="msg_defaults_loaded">Defaults loaded. Tap Apply to publish them.</string>
+    <string name="msg_saved">Saved. The hook applies it on the next carrier config read.</string>
+    <string name="msg_applied">Applied. New carrier config reads use these values immediately; the signal bars refresh on the next update.</string>
+    <string name="msg_invalid">Invalid configuration. Nothing was written.</string>
+    <string name="msg_framework_unavailable">LSPosed service is not reachable. Enable the module in LSPosed, then reopen this app.</string>
+    <string name="msg_hook_inactive">The module is not hooked into com.android.phone. Enable it in LSPosed and restart the process.</string>
+    <string name="msg_restart_required">The running hook is older than the installed module. Restart com.android.phone or reboot.</string>
+    <string name="msg_stored_invalid">A stored configuration failed validation and is not applied: %1$s</string>
+    <string name="msg_loaded_absent">No saved configuration. Showing defaults.</string>
+    <string name="msg_commit_failed">The framework rejected the write. Nothing changed.</string>
+
+    <string name="footnote">Writes only %1$s via a read-side hook in com.android.phone. No Shizuku, no root, no persistent override.</string>
+</resources>

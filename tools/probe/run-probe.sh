@@ -3,6 +3,18 @@
 #
 # Set ANDROID_HOME. Set DEVICE to a serial when more than one device is attached.
 #
+# Usage:
+#   ./run-probe.sh                      # print the threshold key
+#   ./run-probe.sh --expect=-128,-118,-108,-98
+#   ./run-probe.sh --dump > after.txt   # diff against a baseline dump
+#
+# Baseline workflow for "no other key is affected":
+#   1. disable the module in LSPosed, restart com.android.phone
+#   2. ./run-probe.sh --dump > before.txt
+#   3. enable the module, restart com.android.phone
+#   4. ./run-probe.sh --dump > after.txt
+#   5. diff before.txt after.txt   -> only 5g_nr_ssrsrp_thresholds_int_array may differ
+#
 # Under Git Bash the SDK tools are Windows executables, so every host path handed
 # to them goes through cygpath; MSYS_NO_PATHCONV keeps adb's device-side paths intact.
 set -euo pipefail
@@ -46,4 +58,4 @@ SUBID=${SUBID:-$("${adb[@]}" shell 'dumpsys telephony.registry | grep -oE "mSubI
 SUBID=${SUBID:-1}
 
 "${adb[@]}" shell \
-    "CLASSPATH=/data/local/tmp/carrierims-probe.dex app_process / CarrierConfigProbe $SUBID"
+    "CLASSPATH=/data/local/tmp/carrierims-probe.dex app_process / CarrierConfigProbe $SUBID $*"

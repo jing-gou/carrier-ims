@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="bg">#0B1016</color>
+    <color name="surface">#141B24</color>
+    <color name="surface_stroke">#223040</color>
+    <color name="text_primary">#E6EDF3</color>
+    <color name="text_muted">#8A9AAB</color>
+    <color name="accent">#3DDC97</color>
+    <color name="accent_pressed">#2BB57C</color>
+    <color name="error">#FF6B6B</color>
+    <color name="warn">#FFB454</color>
+    <color name="chip_idle">#2A3542</color>
+    <color name="chip_active_bg">#143026</color>
+    <color name="chip_error_bg">#33201F</color>
+    <color name="chip_warn_bg">#332915</color>
+    <color name="level_none">#39434F</color>
+    <color name="level_poor">#E05C5C</color>
+    <color name="level_moderate">#E8A33D</color>
+    <color name="level_good">#8BC34A</color>
+    <color name="level_excellent">#35C4A0</color>
+</resources>

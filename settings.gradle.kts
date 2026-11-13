@@ -17,3 +17,4 @@ dependencyResolutionManagement {
 rootProject.name = "carrier-ims"
 
 include(":app")
+include(":core")

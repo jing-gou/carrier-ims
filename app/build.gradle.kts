@@ -38,8 +38,8 @@ android {
         applicationId = "io.github.nku100.carrierims"
         minSdk = 26
         targetSdk = 37
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 2
+        versionName = "2.0.0"
     }
 
     signingConfigs {
@@ -85,6 +85,10 @@ android {
 }
 
 dependencies {
+    implementation(project(":core"))
+    // Modern libxposed service client: this is how the GUI reaches the framework's writable
+    // remote preferences and how it asks which processes the module is currently hooked into.
+    implementation(libs.libxposed.service)
     compileOnly(libs.libxposed.api)
     testImplementation(libs.junit)
 }
