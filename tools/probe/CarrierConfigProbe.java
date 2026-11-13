@@ -2,45 +2,77 @@ import android.os.IBinder;
 import android.os.PersistableBundle;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.Collections;
+import java.util.List;
 
 /**
- * Reads carrier config straight off the binder as the shell uid and compares it against the
- * values the module is supposed to inject. The expected table below is deliberately a separate
- * hardcoded copy of CarrierOverrides: two independent statements of the same intent are a test,
- * one shared constant would be a tautology.
+ * Reads carrier config straight off the binder as the shell uid.
+ *
+ * <p>Three modes:
+ *
+ * <ul>
+ *   <li>{@code --dump}: print every key as {@code key=value}, sorted. Run it once with the module
+ *       disabled and once with it enabled, then diff: the only difference must be the threshold
+ *       key. That is how "other CarrierConfig keys are unaffected" is verified on a real device.</li>
+ *   <li>{@code --expect=t1,t2,t3,t4}: compare the threshold key against the given values and exit
+ *       non-zero on mismatch.</li>
+ *   <li>no flags: print the threshold key and whether it is present.</li>
+ * </ul>
+ *
+ * <p>The expected values are passed in rather than hardcoded: after this refactor they are user
+ * data, so a hardcoded table would be a tautology that always agreed with itself.
  */
 public class CarrierConfigProbe {
 
-    private static final Map<String, Object> EXPECTED = new LinkedHashMap<>();
-
-    static {
-        EXPECTED.put("show_ims_registration_status_bool", true);
-        EXPECTED.put("carrier_volte_available_bool", true);
-        EXPECTED.put("carrier_vt_available_bool", true);
-        EXPECTED.put("carrier_supports_ss_over_ut_bool", true);
-        EXPECTED.put("carrier_cross_sim_ims_available_bool", true);
-        EXPECTED.put("enable_cross_sim_calling_on_opportunistic_data_bool", true);
-        EXPECTED.put("carrier_wfc_ims_available_bool", true);
-        EXPECTED.put("carrier_wfc_supports_wifi_only_bool", true);
-        EXPECTED.put("editable_wfc_mode_bool", true);
-        EXPECTED.put("editable_wfc_roaming_mode_bool", true);
-        EXPECTED.put("show_wifi_calling_icon_in_status_bar_bool", true);
-        EXPECTED.put("wfc_spn_format_idx_int", 6);
-        EXPECTED.put("editable_enhanced_4g_lte_bool", true);
-        EXPECTED.put("hide_enhanced_4g_lte_bool", false);
-        EXPECTED.put("hide_lte_plus_data_icon_bool", false);
-        EXPECTED.put("vonr_enabled_bool", true);
-        EXPECTED.put("vonr_setting_visibility_bool", true);
-        EXPECTED.put("carrier_nr_availabilities_int_array", new int[]{1, 2});
-        EXPECTED.put("5g_nr_ssrsrp_thresholds_int_array", new int[]{-128, -118, -108, -98});
-    }
+    private static final String KEY = "5g_nr_ssrsrp_thresholds_int_array";
 
     public static void main(String[] args) throws Exception {
-        int subId = args.length > 0 ? Integer.parseInt(args[0]) : 1;
+        int subId = 1;
+        boolean dump = false;
+        int[] expect = null;
 
+        for (String arg : args) {
+            if ("--dump".equals(arg)) {
+                dump = true;
+            } else if (arg.startsWith("--expect=")) {
+                expect = parseInts(arg.substring("--expect=".length()));
+            } else if (!arg.startsWith("--")) {
+                subId = Integer.parseInt(arg);
+            } else {
+                System.out.println("FATAL unknown flag " + arg);
+                System.exit(2);
+            }
+        }
+
+        PersistableBundle config = readConfig(subId);
+
+        if (dump) {
+            List<String> keys = new ArrayList<>(config.keySet());
+            Collections.sort(keys);
+            for (String key : keys) {
+                System.out.println(key + "=" + format(config.get(key)));
+            }
+            System.out.println("# keys=" + keys.size() + " subId=" + subId);
+            return;
+        }
+
+        int[] actual = config.getIntArray(KEY);
+        if (expect == null) {
+            System.out.println(KEY + "=" + format(actual));
+            System.out.println("present=" + (actual != null));
+            return;
+        }
+
+        boolean ok = Arrays.equals(expect, actual);
+        System.out.printf("%-4s %-40s want=%-24s got=%s%n",
+                ok ? "PASS" : "FAIL", KEY, Arrays.toString(expect), format(actual));
+        System.out.println(ok ? "RESULT threshold key matches" : "RESULT threshold key mismatch");
+        System.exit(ok ? 0 : 1);
+    }
+
+    private static PersistableBundle readConfig(int subId) throws Exception {
         IBinder binder = (IBinder) Class.forName("android.os.ServiceManager")
                 .getMethod("getService", String.class).invoke(null, "carrier_config");
         if (binder == null) {
@@ -66,6 +98,7 @@ public class CarrierConfigProbe {
         if (reader == null) {
             System.out.println("FATAL no reader method on " + loader.getClass());
             System.exit(2);
+            return null;
         }
 
         Object[] callArgs = new Object[reader.getParameterCount()];
@@ -74,45 +107,39 @@ public class CarrierConfigProbe {
             callArgs[i] = i == 1 ? "com.android.shell" : null;
         }
 
-        System.out.println("reader   " + reader.getName() + "/" + reader.getParameterCount()
-                + "  subId=" + subId);
+        System.err.println("reader " + reader.getName() + "/" + reader.getParameterCount()
+                + " subId=" + subId);
 
         PersistableBundle config = (PersistableBundle) reader.invoke(loader, callArgs);
         if (config == null) {
             System.out.println("FATAL reader returned null");
             System.exit(2);
         }
-        System.out.println("keys     " + config.size());
+        return config;
+    }
 
-        int failed = 0;
-        for (Map.Entry<String, Object> e : EXPECTED.entrySet()) {
-            String key = e.getKey();
-            Object want = e.getValue();
-            boolean ok;
-            String got;
-            if (want instanceof int[]) {
-                int[] actual = config.getIntArray(key);
-                ok = Arrays.equals((int[]) want, actual);
-                got = actual == null ? "null" : Arrays.toString(actual);
-                want = Arrays.toString((int[]) want);
-            } else if (want instanceof Boolean) {
-                boolean actual = config.getBoolean(key);
-                ok = want.equals(actual);
-                got = String.valueOf(actual);
-            } else {
-                int actual = config.getInt(key);
-                ok = want.equals(actual);
-                got = String.valueOf(actual);
-            }
-            System.out.printf("%-4s %-52s want=%-24s got=%s%n", ok ? "PASS" : "FAIL", key, want, got);
-            if (!ok) {
-                failed++;
-            }
+    private static int[] parseInts(String csv) {
+        String[] parts = csv.split(",");
+        if (parts.length != 4) {
+            throw new IllegalArgumentException("expected 4 comma separated values: " + csv);
         }
+        int[] values = new int[4];
+        for (int i = 0; i < 4; i++) {
+            values[i] = Integer.parseInt(parts[i].trim());
+        }
+        return values;
+    }
 
-        System.out.println(failed == 0
-                ? "RESULT all " + EXPECTED.size() + " keys match"
-                : "RESULT " + failed + " of " + EXPECTED.size() + " keys mismatch");
-        System.exit(failed == 0 ? 0 : 1);
+    private static String format(Object value) {
+        if (value == null) {
+            return "null";
+        }
+        if (value instanceof int[]) {
+            return Arrays.toString((int[]) value);
+        }
+        if (value instanceof Object[]) {
+            return Arrays.deepToString((Object[]) value);
+        }
+        return String.valueOf(value);
     }
 }

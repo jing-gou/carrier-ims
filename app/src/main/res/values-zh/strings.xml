@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">NR 信号阈值</string>
+    <string name="subtitle">5G NR SS-RSRP 配置</string>
+
+    <string name="status_unknown">状态未知</string>
+    <string name="status_framework_unavailable">框架不可用</string>
+    <string name="status_hook_active">Hook 已生效</string>
+    <string name="status_hook_inactive">Hook 未生效</string>
+    <string name="status_restart_required">需要重启</string>
+
+    <string name="card_thresholds">阈值</string>
+    <string name="card_thresholds_hint">四个 SS-RSRP 边界，单位 dBm，必须严格递增。</string>
+    <string name="card_preview">等级预览</string>
+    <string name="card_preview_hint">Android 按这些边界给测量值分级；名称对应 NONE / POOR / MODERATE / GOOD / EXCELLENT。</string>
+
+    <string name="threshold_1_label">阈值 1</string>
+    <string name="threshold_2_label">阈值 2</string>
+    <string name="threshold_3_label">阈值 3</string>
+    <string name="threshold_4_label">阈值 4</string>
+    <string name="unit_dbm">dBm</string>
+    <string name="range_hint">允许范围：-140 ~ -44 dBm</string>
+
+    <string name="preset_label">预设</string>
+    <string name="preset_samsung">三星</string>
+    <string name="preset_oppo">OPPO</string>
+    <string name="preset_vivo">vivo</string>
+    <string name="preset_huawei">华为</string>
+    <string name="msg_preset_loaded">已载入 %1$s 预设，点「应用」后生效。</string>
+
+    <string name="level_none">无信号</string>
+    <string name="level_poor">弱</string>
+    <string name="level_moderate">中</string>
+    <string name="level_good">良</string>
+    <string name="level_excellent">优</string>
+
+    <string name="action_save">保存</string>
+    <string name="action_apply">应用</string>
+    <string name="action_restore">恢复默认</string>
+    <string name="action_refresh">刷新状态</string>
+
+    <string name="icon_card_title">应用</string>
+    <string name="icon_hide_label">隐藏应用图标</string>
+    <string name="icon_hide_hint">只隐藏桌面入口，模块照常工作，仍可从 LSPosed 或 adb 打开本界面。</string>
+    <string name="icon_hide_title">隐藏应用图标？</string>
+    <string name="icon_hide_message">桌面入口将消失。再次打开本界面：\n\n• LSPosed → 模块 → NR 信号阈值\n• adb shell am start -n io.github.nku100.carrierims/.ui.MainActivity\n\n模块保持生效，继续应用你的阈值。</string>
+    <string name="icon_hide_confirm">隐藏</string>
+    <string name="icon_hide_cancel">取消</string>
+    <string name="icon_hidden_warning">图标已隐藏。重新打开：\nadb shell am start -n io.github.nku100.carrierims/.ui.MainActivity</string>
+    <string name="icon_hidden_toast">已隐藏桌面图标</string>
+    <string name="icon_restored_toast">已恢复桌面图标</string>
+
+    <string name="msg_defaults_loaded">已填入默认值，点「应用」后生效。</string>
+    <string name="msg_saved">已保存，Hook 会在下次读取 carrier config 时使用。</string>
+    <string name="msg_applied">已应用。新的 carrier config 读取立即使用这些值；信号格会在下次刷新时更新。</string>
+    <string name="msg_invalid">配置无效，未写入任何数据。</string>
+    <string name="msg_framework_unavailable">连不上 LSPosed 服务。请在 LSPosed 中启用模块后重新打开本应用。</string>
+    <string name="msg_hook_inactive">模块未注入 com.android.phone。请在 LSPosed 中启用并重启该进程。</string>
+    <string name="msg_restart_required">正在运行的 Hook 版本较旧。请重启 com.android.phone 或手机。</string>
+    <string name="msg_stored_invalid">已保存的配置未通过校验，未生效：%1$s</string>
+    <string name="msg_loaded_absent">没有已保存的配置，显示默认值。</string>
+    <string name="msg_commit_failed">框架拒绝了写入，未做任何修改。</string>
+
+    <string name="footnote">仅通过 com.android.phone 内的读取侧 Hook 写入 %1$s。不需要 Shizuku，不需要 root，不使用持久化 override。</string>
+</resources>
